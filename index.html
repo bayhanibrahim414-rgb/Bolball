@@ -3,6 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BOLBALL">
+    <meta name="theme-color" content="#f0f9ff">
+    <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="">
+    <link id="app-favicon" rel="icon" type="image/png" href="">
+    <link id="app-manifest" rel="manifest" href="">
+    <script>
+        (function generateBolballHomeIcon() {
+            const size = 512;
+            const cx = size / 2;
+            const cy = size / 2;
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Arka plan (oyunun kendi açık mavi-pembe geçişi)
+            const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+            bgGrad.addColorStop(0, '#f0f9ff');
+            bgGrad.addColorStop(0.55, '#e0f2fe');
+            bgGrad.addColorStop(1, '#fef2f2');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, size, size);
+
+            // Hafif merkez ışık halesi
+            const aura = ctx.createRadialGradient(cx, cy, 20, cx, cy, 240);
+            aura.addColorStop(0, 'rgba(239, 68, 68, 0.14)');
+            aura.addColorStop(0.6, 'rgba(14, 165, 233, 0.08)');
+            aura.addColorStop(1, 'rgba(240, 249, 255, 0)');
+            ctx.fillStyle = aura;
+            ctx.fillRect(0, 0, size, size);
+
+            const scale = 3.05; // 150px hero-logo oranını 512px ikona ölçekler
+
+            function drawArc(radius, lineWidth, startDeg, endDeg, color) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius * scale, (startDeg * Math.PI) / 180, (endDeg * Math.PI) / 180);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth * scale;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+
+            // 1. En Dış Halka (Üst Kırmızı, Alt Turuncu)
+            drawArc(68, 4.2, -135, -45, '#ef4444');
+            drawArc(68, 4.2, 45, 135, '#f97316');
+
+            // 2. İkinci Dış Halka (Sol Sarı, Sağ Pembe)
+            drawArc(60, 4.2, 135, 225, '#eab308');
+            drawArc(60, 4.2, -45, 45, '#ec4899');
+
+            // 3. İç Mavi Yay (Sağ)
+            drawArc(49, 3.8, -45, 45, '#0ea5e9');
+
+            // 4. İç Kırmızı Yay (Üst)
+            drawArc(41, 3.8, -135, -45, '#ef4444');
+
+            // 5. Ortadaki Sıcak Kırmızı Parlak Top
+            const coreR = 27 * scale;
+            ctx.save();
+            ctx.shadowColor = 'rgba(239, 68, 68, 0.55)';
+            ctx.shadowBlur = 28;
+            ctx.shadowOffsetY = 8;
+
+            const coreGrad = ctx.createRadialGradient(
+                cx - coreR * 0.3,
+                cy - coreR * 0.3,
+                coreR * 0.05,
+                cx,
+                cy,
+                coreR
+            );
+            coreGrad.addColorStop(0, '#ffffff');
+            coreGrad.addColorStop(0.65, '#ef4444');
+            coreGrad.addColorStop(1, '#991b1b');
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+            ctx.fillStyle = coreGrad;
+            ctx.fill();
+            ctx.restore();
+
+            const iconDataUrl = canvas.toDataURL('image/png');
+            document.getElementById('apple-touch-icon').href = iconDataUrl;
+            document.getElementById('app-favicon').href = iconDataUrl;
+
+            const manifest = {
+                name: 'BOLBALL',
+                short_name: 'BOLBALL',
+                start_url: '.',
+                display: 'standalone',
+                background_color: '#f0f9ff',
+                theme_color: '#f0f9ff',
+                icons: [
+                    { src: iconDataUrl, sizes: '512x512', type: 'image/png' }
+                ]
+            };
+            document.getElementById('app-manifest').href =
+                'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+        })();
+    </script>
     <title>BOLBALL - Sınırsız Özgürlük v3.0</title>
     <!-- Plus Jakarta Sans Fontu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
